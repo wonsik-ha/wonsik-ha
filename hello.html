@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기타조정 관리 - 파트너 CRM</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 폰트 설정 */
+        body {
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+        }
+        /* 테이블 컬럼 너비 고정 */
+        .table-fixed-layout {
+            table-layout: fixed;
+        }
+        .table-fixed-layout th, .table-fixed-layout td {
+            word-wrap: break-word;
+        }
+        /* 라디오 버튼 커스텀 스타일 */
+        .form-radio {
+            color: #06b6d4; /* cyan-500 */
+        }
+        .form-radio:focus {
+            ring-color: #67e8f9; /* cyan-300 */
+        }
+        /* Disabled input style */
+        input:disabled, select:disabled {
+            background-color: #f3f4f6; /* gray-100 */
+            cursor: not-allowed;
+        }
+        /* Transition for collapsible sections */
+        .collapsible-content {
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            overflow: hidden;
+            max-height: 2000px; /* Large enough to not clip content */
+            opacity: 1;
+        }
+        .collapsible-content.hidden {
+            max-height: 0;
+            opacity: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<div class="flex h-screen">
+    <!-- 메인 컨텐츠 -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- 페이지 헤더 -->
+        <header class="bg-white border-b">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-cyan-600">MyRealTrip</h1>
+                    <p class="text-sm text-gray-500 ml-2 hidden md:block">Partner Center</p>
+                </div>
+                <div class="flex items-center">
+                    <span class="text-sm text-gray-600 mr-4">01:23</span>
+                    <a href="#" class="text-sm text-cyan-600 hover:underline mr-4">공지사항</a>
+                    <div class="relative">
+                        <button class="flex items-center space-x-2">
+                            <span class="w-8 h-8 rounded-full bg-cyan-500 text-white flex items-center justify-center font-bold">M</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 컨텐츠 영역 -->
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6 lg:p-8">
+            <div class="max-w-full mx-auto">
+                <!-- 필터 및 데이터 테이블 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+                    <div class="flex flex-wrap items-center gap-4 mb-4">
+                        <div class="relative flex items-center bg-gray-100 border border-gray-200 rounded-lg px-3 py-2">
+                            <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <input class="bg-transparent focus:outline-none text-sm" value="2025.01.01 - 2025.02.28">
+                        </div>
+                        <div class="relative">
+                            <select class="appearance-none w-full bg-gray-100 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-cyan-500">
+                                <option>조정유형 전체</option>
+                            </select>
+                        </div>
+                        <div class="flex-grow"></div>
+                        <div>
+                            <button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-300 rounded-lg shadow-sm text-sm">마감 후 조정</button>
+                            <button class="bg-white hover:bg-gray-100 text-cyan-600 font-semibold py-2 px-4 border border-cyan-500 rounded-lg shadow-sm text-sm">엑셀 다운로드</button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <p class="text-sm text-gray-600 mb-2">총 8건</p>
+                        <table class="w-full whitespace-nowrap table-fixed-layout">
+                            <thead class="bg-gray-50">
+                            <tr class="text-left text-xs text-gray-500 uppercase tracking-wider">
+                                <th class="p-3 w-28">조정일</th>
+                                <th class="p-3 w-24">조정ID</th>
+                                <th class="p-3 w-40">파트너</th>
+                                <th class="p-3 w-24">GID</th>
+                                <th class="p-3 w-64">상품명</th>
+                                <th class="p-3 w-32">조정유형</th>
+                                <th class="p-3 w-16">구분</th>
+                                <th class="p-3 w-16">통화</th>
+                                <th class="p-3 w-24 text-right">조정금액(원화)</th>
+                                <th class="p-3 w-28 text-right">조정수수료(원화)</th>
+                                <th class="p-3 w-64">조정 사유</th>
+                            </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                            <tr class="bg-gray-100 font-bold">
+                                <td class="p-3" colspan="4">합계</td>
+                                <td class="p-3" colspan="4"></td>
+                                <td class="p-3 text-right text-blue-600">0원</td>
+                                <td class="p-3 text-right text-red-600">0원</td>
+                                <td class="p-3"></td>
+                            </tr>
+                            <tr>
+                                <td class="p-3">2025.02.24</td>
+                                <td class="p-3">100181</td>
+                                <td class="p-3"><a href="#" class="text-cyan-600 hover:underline">101055 (L*드)</a></td>
+                                <td class="p-3"><a href="#" class="text-cyan-600 hover:underline">2539482</a></td>
+                                <td class="p-3 truncate"><a href="#" class="text-cyan-600 hover:underline">LA 디즈니랜드 테스트 상품 - 2 Day</a></td>
+                                <td class="p-3">기타 수수료 차감</td>
+                                <td class="p-3"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">차감</span></td>
+                                <td class="p-3">KRW</td>
+                                <td class="p-3 text-right">0원</td>
+                                <td class="p-3 text-right text-red-600">-2,222원</td>
+                                <td class="p-3 truncate">마이너스 입력</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 기타조정 등록 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
+                    <div id="toggle-registration-section" class="flex justify-between items-center cursor-pointer">
+                        <h3 class="text-lg font-semibold">기타조정 등록</h3>
+                        <svg id="toggle-registration-icon" class="w-6 h-6 transition-transform transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                    </div>
+
+                    <div id="registration-content" class="collapsible-content mt-4 border-t pt-4">
+                        <div class="mb-4 flex items-center space-x-6">
+                            <span class="font-semibold text-sm text-gray-700">등록 방식</span>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" name="registrationType" value="gid" class="form-radio h-4 w-4 text-cyan-600 border-gray-300 focus:ring-cyan-500" checked>
+                                <span class="ml-2 text-sm">GID 기준</span>
+                            </label>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" name="registrationType" value="reservation" class="form-radio h-4 w-4 text-cyan-600 border-gray-300 focus:ring-cyan-500">
+                                <span class="ml-2 text-sm">예약ID 기준</span>
+                            </label>
+                        </div>
+
+                        <!-- GID 기준 등록 -->
+                        <div id="gid-registration">
+                            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 text-sm">
+                                <div class="lg:col-span-1"><label class="font-semibold text-gray-600 text-xs">GID</label><div class="flex items-center mt-1"><input id="gid-input" class="w-full text-sm appearance-none block bg-gray-100 text-gray-700 border border-gray-200 rounded-l py-1.5 px-3 leading-tight focus:outline-none focus:bg-white focus:border-cyan-500" type="text" placeholder="GID 입력"><button onclick="searchData('gid')" class="bg-cyan-500 text-white rounded-r px-3 py-1.5 hover:bg-cyan-600 text-xs">조회</button></div></div>
+                                <div class="lg:col-span-1"><label class="font-semibold text-gray-600 text-xs">Product No</label><input id="gid-productNo" type="text" class="mt-1 w-full p-1.5 border rounded text-sm" disabled></div>
+                                <div class="lg:col-span-1"><label class="font-semibold text-gray-600 text-xs">행사번호</label><input id="gid-eventNo" type="text" placeholder="행사번호 입력" class="mt-1 w-full p-1.5 border rounded text-sm"></div>
+                                <div class="lg:col-span-1"><label class="font-semibold text-gray-600 text-xs">파트너 ID</label><input id="gid-partnerId" type="text" class="mt-1 w-full p-1.5 border rounded text-sm" disabled></div>
+                                <div class="lg:col-span-2"><label class="font-semibold text-gray-600 text-xs">파트너명</label><input id="gid-partnerName" type="text" class="mt-1 w-full p-1.5 border rounded text-sm" disabled></div>
+                                <div class="lg:col-span-6"><label class="font-semibold text-gray-600 text-xs">상품명</label><input id="gid-productName" type="text" class="mt-1 w-full p-1.5 border rounded text-sm" disabled></div>
+                                <div class="lg:col-span-2"><label for="gid-adjustmentType" class="font-semibold text-gray-600 text-xs">조정유형</label><select id="gid-adjustmentType" class="mt-1 w-full p-1.5 border rounded bg-gray-50 focus:bg-white text-sm"><option value="fee_deduct">기타 수수료 차감</option><option value="fee_add">기타 수수료 가산</option><option value="settle_deduct">기타 정산 차감</option><option value="settle_add">기타 정산 가산</option></select></div>
+                                <div class="lg:col-span-1"><label class="font-semibold text-gray-600 text-xs">구분</label><input id="gid-division" type="text" class="mt-1 w-full p-1.5 border rounded text-sm" value="차감" disabled></div>
+                                <div class="lg:col-span-1"><label for="gid-currency" class="font-semibold text-gray-600 text-xs">통화</label><select id="gid-currency" class="mt-1 w-full p-1.5 border rounded bg-gray-50 focus:bg-white text-sm"><option value="KRW">KRW</option><option value="USD">USD</option><option value="EUR">EUR</option><option value="JPY">JPY</option></select></div>
+                                <div class="lg:col-span-1"><label for="gid-exchangeRate" class="font-semibold text-gray-600 text-xs">환율</label><input id="gid-exchangeRate" type="number" value="1" class="mt-1 w-full p-1.5 border rounded text-sm" disabled></div>
+                                <div class="lg:col-span-1"><label for="gid-adjAmountForeign" class="font-semibold text-gray-600 text-xs">조정금액(외화)</label><input id="gid-adjAmountForeign" type="number" placeholder="0" class="mt-1 w-full p-1.5 border rounded text-sm" disabled></div>
+                                <div class="lg:col-span-1"><label for="gid-adjAmountKrw" class="font-semibold text-gray-600 text-xs">조정금액(원화)</label><input id="gid-adjAmountKrw" type="number" placeholder="0" class="mt-1 w-full p-1.5 border rounded text-sm"></div>
+                                <div class="lg:col-span-1"><label for="gid-adjFeeForeign" class="font-semibold text-gray-600 text-xs">조정수수료(외화)</label><input id="gid-adjFeeForeign" type="number" placeholder="0" class="mt-1 w-full p-1.5 border rounded text-sm" disabled></div>
+                                <div class="lg:col-span-1"><label for="gid-adjFeeKrw" class="font-semibold text-gray-600 text-xs">조정수수료(원화)</label><input id="gid-adjFeeKrw" type="number" placeholder="0" class="mt-1 w-full p-1.5 border rounded text-sm"></div>
+                                <div class="lg:col-span-6"><label for="gid-reason" class="font-semibold text-gray-600 text-xs">조정사유</label><input id="gid-reason" type="text" placeholder="최대 200자" class="mt-1 w-full p-1.5 border rounded text-sm"></div>
+                            </div>
+                        </div>
+
+                        <!-- 예약ID 기준 등록 (기본 숨김) -->
+                        <div id="reservation-id-registration" class="hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 text-sm">
+                                <div class="lg:col-span-2"><label class="font-semibold text-gray-600 text-xs">예약ID</label><div class="flex items-center mt-1"><input id="rsv-input" class="w-full text-sm appearance-none block bg-gray-100 text-gray-700 border border-gray-200 rounded-l py-1.5 px-3 leading-tight focus:outline-none focus:bg-white focus:border-cyan-500" type="text" placeholder="예약ID 입력"><button onclick="searchData('reservation')" class="bg-cyan-500 text-white rounded-r px-3 py-1.5 hover:bg-cyan-600 text-xs">조회</button></div></div>
+                                <div class="lg:col-span-1"><label class="font-semibold text-gray-600 text-xs">행사번호</label><input id="rsv-eventNo" type="text" class="mt-1 w-full p-1.5 border rounded text-sm" disabled></div>
+                                <div class="lg:col-span-1"><label class="font-semibold text-gray-600 text-xs">파트너 ID</label><input id="rsv-partnerId" type="text" class="mt-1 w-full p-1.5 border rounded text-sm" disabled></div>
+                                <div class="lg:col-span-2"><label class="font-semibold text-gray-600 text-xs">파트너명</label><input id="rsv-partnerName" type="text" class="mt-1 w-full p-1.5 border rounded text-sm" disabled></div>
+                                <div class="lg:col-span-6"><label class="font-semibold text-gray-600 text-xs">상품명</label><input id="rsv-productName" type="text" class="mt-1 w-full p-1.5 border rounded text-sm" disabled></div>
+                                <div class="lg:col-span-2"><label for="rsv-adjustmentType" class="font-semibold text-gray-600 text-xs">조정유형</label><select id="rsv-adjustmentType" class="mt-1 w-full p-1.5 border rounded bg-gray-50 focus:bg-white text-sm"><option value="fee_deduct">기타 수수료 차감</option><option value="fee_add">기타 수수료 가산</option><option value="settle_deduct">기타 정산 차감</option><option value="settle_add">기타 정산 가산</option></select></div>
+                                <div class="lg:col-span-1"><label class="font-semibold text-gray-600 text-xs">구분</label><input id="rsv-division" type="text" class="mt-1 w-full p-1.5 border rounded text-sm" value="차감" disabled></div>
+                                <div class="lg:col-span-1"><label for="rsv-currency" class="font-semibold text-gray-600 text-xs">통화</label><select id="rsv-currency" class="mt-1 w-full p-1.5 border rounded bg-gray-50 focus:bg-white text-sm"><option value="KRW">KRW</option><option value="USD">USD</option></select></div>
+                                <div class="lg:col-span-1"><label for="rsv-exchangeRate" class="font-semibold text-gray-600 text-xs">환율</label><input id="rsv-exchangeRate" type="number" value="1" class="mt-1 w-full p-1.5 border rounded text-sm" disabled></div>
+                                <div class="lg:col-span-1"><label for="rsv-adjAmountForeign" class="font-semibold text-gray-600 text-xs">조정금액(외화)</label><input id="rsv-adjAmountForeign" type="number" placeholder="0" class="mt-1 w-full p-1.5 border rounded text-sm" disabled></div>
+                                <div class="lg:col-span-1"><label for="rsv-adjAmountKrw" class="font-semibold text-gray-600 text-xs">조정금액(원화)</label><input id="rsv-adjAmountKrw" type="number" placeholder="0" class="mt-1 w-full p-1.5 border rounded text-sm"></div>
+                                <div class="lg:col-span-1"><label for="rsv-adjFeeForeign" class="font-semibold text-gray-600 text-xs">조정수수료(외화)</label><input id="rsv-adjFeeForeign" type="number" placeholder="0" class="mt-1 w-full p-1.5 border rounded text-sm" disabled></div>
+                                <div class="lg:col-span-1"><label for="rsv-adjFeeKrw" class="font-semibold text-gray-600 text-xs">조정수수료(원화)</label><input id="rsv-adjFeeKrw" type="number" placeholder="0" class="mt-1 w-full p-1.5 border rounded text-sm"></div>
+                                <div class="lg:col-span-6"><label for="rsv-reason" class="font-semibold text-gray-600 text-xs">조정사유</label><input id="rsv-reason" type="text" placeholder="최대 200자" class="mt-1 w-full p-1.5 border rounded text-sm"></div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end mt-6">
+                            <button class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg text-sm mr-2">초기화</button>
+                            <button class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded-lg text-sm">등록</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 기타조정 엑셀 업로드 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <div id="toggle-excel-section" class="flex justify-between items-center cursor-pointer">
+                        <h3 class="text-lg font-semibold">기타조정 엑셀 업로드</h3>
+                        <svg id="toggle-excel-icon" class="w-6 h-6 transition-transform transform -rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                    </div>
+                    <div id="excel-content" class="collapsible-content hidden mt-4 border-t pt-4">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead class="bg-gray-50">
+                                <tr class="text-left text-xs text-gray-500 uppercase tracking-wider">
+                                    <th class="p-3">파일 선택</th>
+                                    <th class="p-3">업로드양식</th>
+                                </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="p-3">
+                                        <input type="file" class="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100"/>
+                                        <p class="text-xs text-gray-500 mt-1">* 정해진 양식으로 작성된 파일만 업로드 할 수 있습니다.</p>
+                                    </td>
+                                    <td class="p-3">
+                                        <button class="bg-white hover:bg-gray-100 text-cyan-600 font-semibold py-2 px-4 border border-cyan-500 rounded-lg shadow-sm text-sm">엑셀 다운로드</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="flex justify-end mt-4">
+                            <button class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg text-sm mr-2">취소</button>
+                            <button class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded-lg text-sm" disabled>등록</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    // --- Mock Data ---
+    const mockGidData = {
+        '2539482': { productNo: 'PN-LAX-DISNEY', productName: 'LA 디즈니랜드 테스트 상품 - 2 Day', partnerId: '101055', partnerName: 'L*nd-Biz' }
+    };
+    const mockReservationData = {
+        'EXP-20250224-00012345': { productName: '[인디고트래블] 가우디 반일 차량 투어', partnerId: '2046', partnerName: '(주)인디고트래블', eventNo: 'EVT-GAUDI-250224' }
+    };
+
+    // --- Main Setup ---
+    document.addEventListener('DOMContentLoaded', function () {
+        // Collapsible sections
+        setupCollapsible('toggle-registration-section', 'registration-content', 'toggle-registration-icon', false);
+        setupCollapsible('toggle-excel-section', 'excel-content', 'toggle-excel-icon', true);
+
+        // Registration type change handler
+        document.querySelectorAll('input[name="registrationType"]').forEach(radio => {
+            radio.addEventListener('change', handleRegistrationTypeChange);
+        });
+
+        // Form listeners
+        setupFormListeners('gid');
+        setupFormListeners('rsv');
+    });
+
+    // --- Core Logic Functions ---
+    function setupCollapsible(toggleId, contentId, iconId, isCollapsedDefault) {
+        const toggleBtn = document.getElementById(toggleId);
+        const content = document.getElementById(contentId);
+        const icon = document.getElementById(iconId);
+
+        if (isCollapsedDefault) {
+            content.classList.add('hidden');
+            icon.classList.add('-rotate-180');
+        } else {
+            icon.classList.remove('-rotate-180');
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            content.classList.toggle('hidden');
+            icon.classList.toggle('-rotate-180');
+        });
+    }
+
+    function handleRegistrationTypeChange() {
+        const isGid = this.value === 'gid';
+        document.getElementById('gid-registration').classList.toggle('hidden', !isGid);
+        document.getElementById('reservation-id-registration').classList.toggle('hidden', isGid);
+    }
+
+    function setupFormListeners(prefix) {
+        document.getElementById(`${prefix}-adjustmentType`).addEventListener('change', () => updateFormState(prefix));
+        document.getElementById(`${prefix}-currency`).addEventListener('change', () => updateFormState(prefix));
+        updateFormState(prefix); // Initial state
+    }
+
+    function updateFormState(prefix) {
+        const typeSelect = document.getElementById(`${prefix}-adjustmentType`);
+        const currencySelect = document.getElementById(`${prefix}-currency`);
+        const divisionInput = document.getElementById(`${prefix}-division`);
+        const rateInput = document.getElementById(`${prefix}-exchangeRate`);
+        const adjAmountKrw = document.getElementById(`${prefix}-adjAmountKrw`);
+        const adjFeeKrw = document.getElementById(`${prefix}-adjFeeKrw`);
+        const adjAmountForeign = document.getElementById(`${prefix}-adjAmountForeign`);
+        const adjFeeForeign = document.getElementById(`${prefix}-adjFeeForeign`);
+
+        const isFee = typeSelect.value.includes('fee');
+        const isDeduct = typeSelect.value.includes('deduct');
+        const isKrw = currencySelect.value === 'KRW';
+
+        divisionInput.value = isDeduct ? '차감' : '가산';
+
+        adjAmountKrw.disabled = isFee;
+        adjFeeKrw.disabled = !isFee;
+        adjAmountForeign.disabled = isFee || isKrw;
+        adjFeeForeign.disabled = !isFee || isKrw;
+        rateInput.disabled = isKrw;
+
+        if (isFee) { adjAmountKrw.value = ''; adjAmountForeign.value = ''; }
+        else { adjFeeKrw.value = ''; adjFeeForeign.value = ''; }
+
+        if (isKrw) {
+            rateInput.value = 1;
+            adjAmountForeign.value = '';
+            adjFeeForeign.value = '';
+        } else {
+            rateInput.value = 1350.50; // Mock rate
+        }
+    }
+
+    function searchData(type) {
+        if (type === 'gid') {
+            const gid = document.getElementById('gid-input').value;
+            const data = mockGidData[gid];
+            if (data) {
+                document.getElementById('gid-productNo').value = data.productNo;
+                document.getElementById('gid-productName').value = data.productName;
+                document.getElementById('gid-partnerId').value = data.partnerId;
+                document.getElementById('gid-partnerName').value = data.partnerName;
+            } else {
+                alert('해당 GID 정보를 찾을 수 없습니다.');
+            }
+        } else if (type === 'reservation') {
+            const rsvId = document.getElementById('rsv-input').value;
+            const data = mockReservationData[rsvId];
+            if (data) {
+                document.getElementById('rsv-productName').value = data.productName;
+                document.getElementById('rsv-partnerId').value = data.partnerId;
+                document.getElementById('rsv-partnerName').value = data.partnerName;
+                document.getElementById('rsv-eventNo').value = data.eventNo;
+            } else {
+                alert('해당 예약ID 정보를 찾을 수 없습니다.');
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
