@@ -140,8 +140,14 @@ graph TB
     Draft --> File
     Draft --> Log
     
-    BG <--> ERP
-    BG <--> Dooray
+    %% Message Communication
+    Popup -.->|"chrome.runtime.sendMessage<br/>saveExecutionData"| BG
+    BG -.->|"chrome.tabs.sendMessage<br/>startAutomation"| ERP
+    BG -.->|"chrome.scripting.executeScript<br/>getAllErpRowObjects"| ERPUI
+    ERP -.->|"chrome.runtime.sendMessage<br/>saveErpTabInfo"| BG
+    Dooray -.->|"chrome.runtime.sendMessage<br/>getExecutionData<br/>changeDraftTitle"| BG
+    BG -.->|"chrome.runtime.sendMessage<br/>automationLog"| Popup
+    
     BG <--> Storage
     
     ERP <--> ERPUI
